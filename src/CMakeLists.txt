@@ -31,6 +31,13 @@ endif()
 
 add_executable(image-stitching ${SOURCES})
 target_link_libraries(image-stitching ${JPEG_LIBRARIES})
+# Build the library for polymorphision
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/stitch)
+list(REMOVE_ITEM SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/main.cc)
+list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/api.cc)
+message(${SOURCES})
+add_definitions(-DBUILD_OPEN_PANO)
+add_library(openpano STATIC ${SOURCES})
 
 # Visual Studio handling of file glob
 # This part is not maintained.. I don't know what it is

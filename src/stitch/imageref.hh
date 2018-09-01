@@ -11,6 +11,30 @@
 namespace pano {
 		// A transparent reference to a image in file
 		struct ImageRef {
+			ImageRef(const ImageRef& rhs) {
+				fname = rhs.fname;
+				_width = rhs._width;
+				_height = rhs._height;
+				img = new Mat32f(rhs.img->clone());
+			}
+
+			ImageRef(ImageRef&& rhs) {
+				fname = move(rhs.fname);
+				img = rhs.img;
+				_width = rhs._width;
+				_height = rhs._height;
+				rhs.img = nullptr;
+			}
+
+			ImageRef& operator=(ImageRef&& rhs) {
+				fname = move(rhs.fname);
+				img = rhs.img;
+				_width = rhs._width;
+				_height = rhs._height;
+				rhs.img = nullptr;
+				return *this;
+			}
+
 			std::string fname;
 			Mat32f* img = nullptr;
 			int _width, _height;

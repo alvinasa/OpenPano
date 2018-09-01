@@ -19,7 +19,7 @@ struct MatchInfo;
 class PairWiseMatcher;
 
 class Stitcher : public StitcherBase {
-	private:
+	protected:
 		// transformation and metadata of each image
 		ConnectedImages bundle;
 

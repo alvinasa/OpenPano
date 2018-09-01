@@ -52,7 +52,7 @@ class StitcherBase {
 				 *  error_exit(ssprintf("Cannot stitch with only %lu images.", imgs.size()));
 				 */
 				for (auto& n : i)
-					imgs.emplace_back(n);
+					imgs.emplace_back(std::move(n));
 
 				feature_det.reset(new SIFTDetector);
 			}
