@@ -261,7 +261,7 @@ void work2(int argc, char* argv[]) {
 		CylinderStitcher p(move(imgs));
 		res = p.build();
 	} else {
-		Stitcher p(move(imgs));
+		Stitcher p(move(imgs), true);
 		res = p.build();
 	}
 
@@ -374,8 +374,8 @@ void planet(const char* fname) {
 
 int main(int argc, char* argv[]) {
 	if (argc <= 2)
-	init_config();
 		error_exit("Need at least two images to stitch.\n");
+	init_config();
 	TotalTimerGlobalGuard _g;
 	srand(time(NULL));
 	string command = argv[1];

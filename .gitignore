@@ -13,3 +13,6 @@ log
 
 *-report
 *.so
+
+build*/
+.vscode

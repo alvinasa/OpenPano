@@ -51,13 +51,16 @@ class Stitcher : public StitcherBase {
 	public:
 		template<typename U, typename X =
 			disable_if_same_or_derived<Stitcher, U>>
-			Stitcher(U&& i) : StitcherBase(std::forward<U>(i)) {
+			Stitcher(U&& i, bool debug=false)
+			: StitcherBase(std::forward<U>(i))
+			, debug_(debug) {
 				bundle.component.resize(imgs.size());
 				REP(i, imgs.size())
 					bundle.component[i].imgptr = &imgs[i];
 			}
 
 		virtual Mat32f build();
+		bool debug_;
 };
 
 }

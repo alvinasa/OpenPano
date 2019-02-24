@@ -343,6 +343,31 @@ OPEN_PANO_API Mat32f Stitch(std::vector<pano::ImageRef>&& imgs) {
 	return res;
 }
 
+OPEN_PANO_API Mat32f Stitch(std::vector<Matuc>&& imgs, bool debug) {
+	init_config();
+
+	Mat32f res;
+	if (CYLINDER) {
+		CylinderStitcher p(move(imgs));
+		res = p.build();
+	} else {
+		Stitcher p(move(imgs), debug);
+		res = p.build();
+	}
+
+	if (CROP) {
+		int oldw = res.width(), oldh = res.height();
+		res = crop(res);
+		// print_debug("Crop from %dx%d to %dx%d\n", oldw, oldh, res.width(), res.height());
+	}
+	// {
+	// 	// GuardedTimer tm("Writing image");
+	// 	write_rgb("out.jpg", res);
+	// }
+
+	return res;
+}
+
 void planet(const char* fname) {
 	Mat32f test = read_img(fname);
 	int w = test.width(), h = test.height();

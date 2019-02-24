@@ -26,7 +26,6 @@ using namespace config;
 namespace pano {
 
 // use in development
-const static bool DEBUG_OUT = false;
 const static char* MATCHINFO_DUMP = "log/matchinfo.txt";
 
 Mat32f Stitcher::build() {
@@ -41,7 +40,7 @@ Mat32f Stitcher::build() {
     pairwise_match();
   free_feature();
   //load_matchinfo(MATCHINFO_DUMP);
-  if (DEBUG_OUT) {
+  if (debug_) {
     draw_matchinfo();
     dump_matchinfo(MATCHINFO_DUMP);
   }

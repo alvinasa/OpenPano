@@ -26,6 +26,20 @@ namespace pano {
 				rhs.img = nullptr;
 			}
 
+			ImageRef(Mat32f* data) {
+				_width = data->width();
+				_height = data->height();
+				img = data;
+			}
+
+			ImageRef(const Matuc& data) {
+				constexpr int CHANNEL = 3;
+				_width = data.width();
+				_height = data.height();
+				img = new Mat32f(_height, _width, CHANNEL);
+				memcpy(img->ptr(), data.ptr(), _width * _height * CHANNEL);
+			}
+
 			ImageRef& operator=(ImageRef&& rhs) {
 				fname = move(rhs.fname);
 				img = rhs.img;

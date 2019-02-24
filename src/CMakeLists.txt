@@ -1,9 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
-find_package(JPEG REQUIRED)
+# find_package(JPEG REQUIRED NO_SYSTEM_ENVIRONMENT_PATH)
+find_library(JPEG jpeg REQUIRED NO_SYSTEM_ENVIRONMENT_PATH)
+message(${JPEG})
+
 find_package(Eigen3 REQUIRED)
 find_package(OpenMP)
 
-include_directories(${JPEG_INCLUDE_DIR})
+# include_directories(${JPEG_INCLUDE_DIR})
+include_directories(/opt/devel/ref-pi/usr/include /opt/devel/ref-pi/usr/include/arm-linux-gnueabihf)
 include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
 
 include_directories(SYSTEM third-party)
@@ -21,7 +25,7 @@ endif()
 
 add_definitions(-DDEBUG)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
 if (CMAKE_VERSION VERSION_LESS "3.1")
 	set (CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
@@ -30,7 +34,8 @@ else()
 endif()
 
 add_executable(image-stitching ${SOURCES})
-target_link_libraries(image-stitching ${JPEG_LIBRARIES})
+# target_link_libraries(image-stitching ${JPEG_LIBRARIES})
+target_link_libraries(image-stitching ${JPEG})
 # Build the library for polymorphision
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/stitch)
 list(REMOVE_ITEM SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/main.cc)
