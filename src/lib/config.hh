@@ -6,19 +6,19 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-#include <map>
 #include <cstring>
 #include <fstream>
+#include <map>
 
 namespace config {
 
 class ConfigParser {
-	public:
-		std::map<std::string, float> data;
+  public:
+    std::map<std::string, float> data;
 
-		ConfigParser(const char* fname);
+    ConfigParser(const char *fname);
 
-		float get(const std::string& s);
+    float get(const std::string &s);
 };
 
 extern bool CYLINDER;
@@ -67,16 +67,14 @@ extern float LM_LAMBDA;
 
 extern int MULTIBAND;
 
-
-
 // keep unchanged
 const float ORI_WINDOW_FACTOR = 1.5f;
-const int ORI_HIST_BIN_NUM = 36;		// lowe
+const int ORI_HIST_BIN_NUM = 36; // lowe
 const float ORI_HIST_PEAK_RATIO = 0.8f;
 
 const int DESC_HIST_WIDTH = 4;
 const int DESC_HIST_BIN_NUM = 8;
-const int DESC_LEN = 128;	// (4x4)x8
+const int DESC_LEN = 128; // (4x4)x8
 const float DESC_NORM_THRESH = 0.2f;
 
 const int BRIEF_PATH_SIZE = 9;
@@ -84,4 +82,4 @@ const int BRIEF_NR_PAIR = 256;
 
 const int FLANN_NR_KDTREE = 6;
 
-}
+} // namespace config
