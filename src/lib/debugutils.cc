@@ -53,5 +53,6 @@ void __print_debug__(const char *file, const char *func, int line,
 
 void error_exit(const char *msg) {
     c_fprintf(COLOR_RED, stderr, "error: %s\n", msg);
-    exit(1);
+    // exit(1);
+    throw std::runtime_error(msg);
 }

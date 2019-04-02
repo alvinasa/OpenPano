@@ -7,15 +7,20 @@
 #include "match_info.hh"
 #include <memory>
 #include <string>
+#include <cassert>
 
 namespace pano {
 // A transparent reference to a image in file
 struct ImageRef {
+    ImageRef() = delete;
+
     ImageRef(const ImageRef &rhs) {
         fname = rhs.fname;
         _width = rhs._width;
         _height = rhs._height;
         img = new Mat32f(rhs.img->clone());
+
+        assert(img);
     }
 
     ImageRef(ImageRef &&rhs) {
@@ -24,12 +29,16 @@ struct ImageRef {
         _width = rhs._width;
         _height = rhs._height;
         rhs.img = nullptr;
+
+        assert(img);
     }
 
     ImageRef(Mat32f *data) {
         _width = data->width();
         _height = data->height();
         img = data;
+
+        assert(img);
     }
 
     ImageRef(const Matuc &data) {
@@ -37,15 +46,37 @@ struct ImageRef {
         _width = data.width();
         _height = data.height();
         img = new Mat32f(_height, _width, CHANNEL);
-        memcpy(img->ptr(), data.ptr(), _width * _height * CHANNEL);
+        for(int i=0; i<_height; ++i) {
+            for(int j=0; j<_width; ++j) {
+                for(int k=0; k<CHANNEL; ++k) {
+                    img->at(i,j,k) = data.at(i,j,k) / 255.0;
+                }
+            }
+        }
+
+        assert(img);
+        // memcpy(img->ptr(), data.ptr(), _width * _height * CHANNEL);
     }
 
     ImageRef &operator=(ImageRef &&rhs) {
         fname = move(rhs.fname);
         img = rhs.img;
+        
         _width = rhs._width;
         _height = rhs._height;
         rhs.img = nullptr;
+
+        assert(img);
+        return *this;
+    }
+    
+    ImageRef &operator=(ImageRef &rhs) {
+        fname = rhs.fname;
+        _width = rhs._width;
+        _height = rhs._height;
+        img = new Mat32f(rhs.img->clone());
+
+        assert(img);
         return *this;
     }
 

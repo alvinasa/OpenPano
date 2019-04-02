@@ -290,7 +290,7 @@ void work2(int argc, char *argv[]) {
     }
 }
 
-void init_config() {
+OPEN_PANO_API void init_config() {
     static bool inited = false;
     if (inited)
         return;
@@ -303,7 +303,7 @@ void init_config() {
     ORDERED_INPUT = 0;
     CROP = 1;
     MAX_OUTPUT_SIZE = 8000;
-    LAZY_READ = 1;
+    LAZY_READ = 0;
     FOCAL_LENGTH = 37;
     SIFT_WORKING_SIZE = 800;
     NUM_OCTAVE = 3;
@@ -383,6 +383,44 @@ OPEN_PANO_API Mat32f Stitch(std::vector<Matuc> &&imgs, bool debug) {
     // }
 
     return res;
+}
+
+OPEN_PANO_API bool Stitch(Mat32f& stitched,
+                          std::vector<pano::ImageRef> &&imgs,
+                          std::vector<std::vector<Descriptor>>& descriptor,
+                          bool debug)
+{
+    init_config();
+
+    Mat32f res;
+    if (CYLINDER) {
+        CylinderStitcher p(move(imgs));
+        try {
+            res = p.build();
+        } catch(std::runtime_error& ex){
+            descriptor = move(p.getFeatures());
+            return false;
+        }
+        descriptor = move(p.getFeatures());
+    } else {
+        Stitcher p(move(imgs), debug);
+        try {
+            res = p.build();
+        } catch(std::runtime_error& ex){
+            descriptor = move(p.getFeatures());
+            return false;
+        }
+        descriptor = move(p.getFeatures());
+    }
+
+    if (CROP) {
+        int oldw = res.width(), oldh = res.height();
+        res = crop(res);
+    }
+
+    stitched = move(res);
+    print_debug("descriptor size: %d\n", descriptor.size());
+    return true;
 }
 
 void planet(const char *fname) {

@@ -38,11 +38,13 @@ Mat32f Stitcher::build() {
         linear_pairwise_match();
     else
         pairwise_match();
-    free_feature();
+    // free_feature();
     // load_matchinfo(MATCHINFO_DUMP);
     if (debug_) {
         draw_matchinfo();
         dump_matchinfo(MATCHINFO_DUMP);
+    } else {
+        free_feature();
     }
     assign_center();
 
@@ -59,6 +61,47 @@ Mat32f Stitcher::build() {
         bundle.proj_method = ConnectedImages::ProjectionMethod::flat;
     print_debug("Using projection method: %d\n", bundle.proj_method);
     bundle.update_proj_range();
+    return bundle.blend();
+}
+
+Mat32f Stitcher::build2() {
+    if(!inited_) {
+        calc_feature();
+        // TODO choose a better starting point by MST use centrality
+
+        pairwise_matches.resize(imgs.size());
+        for (auto &k : pairwise_matches)
+            k.resize(imgs.size());
+        if (ORDERED_INPUT)
+            linear_pairwise_match();
+        else
+            pairwise_match();
+        // free_feature();
+        // load_matchinfo(MATCHINFO_DUMP);
+        if (debug_) {
+            draw_matchinfo();
+            dump_matchinfo(MATCHINFO_DUMP);
+        } else {
+            free_feature();
+        }
+        assign_center();
+
+        if (ESTIMATE_CAMERA)
+            estimate_camera();
+        else
+            build_linear_simple(); // naive mode
+        pairwise_matches.clear();
+        // TODO automatically determine projection method
+        if (ESTIMATE_CAMERA)
+            // bundle.proj_method = ConnectedImages::ProjectionMethod::cylindrical;
+            bundle.proj_method = ConnectedImages::ProjectionMethod::spherical;
+        else
+            bundle.proj_method = ConnectedImages::ProjectionMethod::flat;
+        print_debug("Using projection method: %d\n", bundle.proj_method);
+        bundle.update_proj_range();
+
+        inited_ = true;
+    }
     return bundle.blend();
 }
 

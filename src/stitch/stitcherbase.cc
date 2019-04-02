@@ -33,4 +33,8 @@ void StitcherBase::free_feature() {
     keypoints.shrink_to_fit(); // free memory for feature
 }
 
+std::vector<std::vector<Descriptor>>& StitcherBase::getFeatures() {
+    return feats;
+}
+
 } // namespace pano

@@ -52,7 +52,7 @@ class StitcherBase {
          *imgs.size()));
          */
         for (auto &n : i)
-            imgs.emplace_back(std::move(n));
+            imgs.emplace_back(n);
 
         feature_det.reset(new SIFTDetector);
     }
@@ -63,6 +63,9 @@ class StitcherBase {
     virtual Mat32f build() = 0;
 
     virtual ~StitcherBase() = default;
+
+    std::vector<std::vector<Descriptor>>& getFeatures();
+    void setImages(std::vector<ImageRef>&& imageRef);
 };
 
 } // namespace pano

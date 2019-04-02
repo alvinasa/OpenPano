@@ -9,6 +9,7 @@
 #include "stitcherbase.hh"
 #include <memory>
 #include <vector>
+#include <external.h>
 
 namespace pano {
 
@@ -18,7 +19,7 @@ class MatchData;
 struct MatchInfo;
 class PairWiseMatcher;
 
-class Stitcher : public StitcherBase {
+OPEN_PANO_API class Stitcher : public StitcherBase {
   protected:
     // transformation and metadata of each image
     ConnectedImages bundle;
@@ -58,8 +59,17 @@ class Stitcher : public StitcherBase {
         bundle.component[i].imgptr = &imgs[i];
     }
 
+    template <typename TImage>
+    void setImage(TImage&& i) {
+        imgs = std::move(i);
+        REP(i, imgs.size())
+          bundle.component[i].imgptr = &imgs[i];
+    }
+
     virtual Mat32f build();
+    virtual Mat32f build2();
     bool debug_;
+    bool inited_ {false};
 };
 
 } // namespace pano
