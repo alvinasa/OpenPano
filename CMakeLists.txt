@@ -46,10 +46,10 @@ endif()
 #################################################################################################################
 # ============================================ General build definitions ====================================== #
 #################################################################################################################
-if(NOT EIGEN3_INCLUDE_DIR )
-    message(FATAL_ERROR "Set EIGEN3_INCLUDE_DIR")
-endif()
-include_directories(${EIGEN3_INCLUDE_DIR})
+#if(NOT EIGEN3_INCLUDE_DIR )
+#    message(FATAL_ERROR "Set EIGEN3_INCLUDE_DIR")
+#endif()
+#include_directories(${EIGEN3_INCLUDE_DIR})
 
 if(MSVC)
 
